@@ -1,0 +1,62 @@
+GET http://localhost:3001/api/users
+
+###
+
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+  "username": "testuser_4",
+  "name": "Test User 4",
+  "password": "secret"
+}
+
+###
+
+GET http://localhost:3001/api/users/3
+
+###
+
+GET http://localhost:3001/api/users/99999
+
+###
+
+PUT http://localhost:3001/api/users/test_user_2
+Content-Type: application/json
+
+{
+  "name": "Modified Test User 3"
+}
+
+###
+
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+  "username": "",
+  "name": "Test User",
+  "password": "secret"
+}
+
+###
+
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+  "username": "empty_name_test",
+  "name": "",
+  "password": "secret"
+}
+
+###
+
+POST http://localhost:3001/api/users
+Content-Type: application/json
+
+{
+  "username": "empty_name_test",
+  "name": " ",
+  "password": "secret"
+}

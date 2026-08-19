@@ -1,0 +1,40 @@
+GET http://localhost:3001/api/blogs
+
+###
+
+GET http://localhost:3001/api/blogs?search=react
+
+###
+
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RfdXNlciIsImlkIjoxLCJpYXQiOjE3ODcwMzgzNzZ9.hlJxKaqLxHdTs4CPd2CP0W8aZ8EmOqzbKxTXKpf3wcA
+
+{
+  "author": "React author",
+  "url": "https://example.com",
+  "title": "test 2",
+  "likes": 5
+}
+
+###
+
+GET http://localhost:3001/api/blogs/15
+
+###
+
+DELETE http://localhost:3001/api/blogs/15
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RfdXNlciIsImlkIjoxLCJpYXQiOjE3ODcwMzgzNzZ9.hlJxKaqLxHdTs4CPd2CP0W8aZ8EmOqzbKxTXKpf3wcA
+
+###
+
+GET http://localhost:3001/api/blogs/99999
+
+###
+
+PUT http://localhost:3001/api/blogs/14
+Content-Type: application/json
+
+{
+  "likes": 4
+}
