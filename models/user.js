@@ -31,10 +31,21 @@ User.init({
       notEmpty: true
     }
   },
+  disabled: {
+    type: DataTypes.BOOLEAN,
+    allowNull: false,
+    defaultValue: false
+  }
 }, {
   sequelize,
   underscored: true,
-  modelName: 'user'
+  modelName: 'user',
+  timestamps: true,
+  defaultScope: {
+    where: {
+      disabled: false
+    }
+  }
 })
 
 module.exports = User

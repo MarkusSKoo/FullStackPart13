@@ -1,12 +1,24 @@
 const jwt = require('jsonwebtoken')
 const { SECRET } = require('../util/config')
-const { Blog } = require("../models");
+const { Blog, Session, User } = require("../models");
 
-const tokenExtractor = (req, res, next) => {
+const tokenExtractor = async(req, res, next) => {
   const authorization = req.get('authorization')
+
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+    const token = authorization.substring(7)
     try {
-      req.decodedToken = jwt.verify(authorization.substring(7), SECRET)
+      req.decodedToken = jwt.verify(token, SECRET)
+      req.session = await Session.findOne({ where: { token: token } })
+      if (!req.session) {
+        return res.status(401).json({ error: 'session expired' })
+      }
+
+      const user = await User.findByPk(req.decodedToken.id)
+      if (!user || user.disabled === true) {
+        return res.status(401).json({ error: 'user disabled or not found' })
+      }
+
     } catch {
       return res.status(401).json({ error: 'token invalid' })
     }
@@ -17,7 +29,6 @@ const tokenExtractor = (req, res, next) => {
 }
 
 const blogFinder = async (req, res, next) => {
-  console.log('REQ: ', req)
   req.blog = await Blog.findByPk(req.params.id);
   if (!req.blog) {
     return res.status(404).end();

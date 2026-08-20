@@ -1,8 +1,10 @@
 const router = require('express').Router()
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
+const { Op } = require('sequelize')
 
-const { User, Blog } = require('../models')
+const { User, Blog, ReadingList } = require('../models')
+const { tokenExtractor } = require('../middleware/middleware')
 
 router.get('/', async (req, res) => {
   const users = await User.findAll({
@@ -33,9 +35,44 @@ router.post('/', async (req, res, next) => {
 })
 
 router.get('/:id', async (req, res) => {
-  const user = await User.findByPk(req.params.id)
+  let where = {}
+    
+  if (req.query.read) {
+    where = { read: req.query.read === "true" }
+  }
+
+  const user = await User.findByPk(req.params.id, {
+    attributes: ['name', 'username'],
+    include: [
+      {
+        model: ReadingList,
+        as: 'readings',
+        attributes: ['id', 'read'],
+        include: {
+          model: Blog,
+          attributes: ['id', 'url', 'title', 'author', 'likes', 'year']
+        },
+        where,
+        required: false
+      }
+    ]
+  })
+
   if (user) {
-    res.json(user)
+    const readings = user.readings.map(reading => ({
+      ...reading.blog.toJSON(),
+      reading_list: {
+        read: reading.read,
+        id: reading.id
+      }
+    }))
+
+    res.json({
+      name: user.name,
+      username: user.username,
+      readings
+    })
+
   } else {
     res.status(404).end()
   }

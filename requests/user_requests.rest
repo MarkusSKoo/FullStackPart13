@@ -6,14 +6,14 @@ POST http://localhost:3001/api/users
 Content-Type: application/json
 
 {
-  "username": "testuser_4",
-  "name": "Test User 4",
+  "username": "testuser@testuser.com",
+  "name": "Test User ",
   "password": "secret"
 }
 
 ###
 
-GET http://localhost:3001/api/users/3
+GET http://localhost:3001/api/users/1?read=false
 
 ###
 
